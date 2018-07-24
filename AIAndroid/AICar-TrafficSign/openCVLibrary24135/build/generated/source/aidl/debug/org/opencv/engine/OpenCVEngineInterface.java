@@ -1,6 +1,6 @@
 /*
  * This file is auto-generated.  DO NOT MODIFY.
- * Original file: C:\\Users\\Administrator\\Desktop\\AICar-TrafficSign\\openCVLibrary24135\\src\\main\\aidl\\org\\opencv\\engine\\OpenCVEngineInterface.aidl
+ * Original file: D:\\studioD\\repository\\googleADK\\AIAndroid\\AICar-TrafficSign\\openCVLibrary24135\\src\\main\\aidl\\org\\opencv\\engine\\OpenCVEngineInterface.aidl
  */
 package org.opencv.engine;
 /**

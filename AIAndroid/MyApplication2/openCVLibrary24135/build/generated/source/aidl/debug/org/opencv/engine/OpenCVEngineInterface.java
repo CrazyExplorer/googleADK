@@ -1,6 +1,6 @@
 /*
  * This file is auto-generated.  DO NOT MODIFY.
- * Original file: C:\\Users\\Administrator\\Desktop\\arcore-android-sdk-master\\samples\\MyApplication2\\openCVLibrary24135\\src\\main\\aidl\\org\\opencv\\engine\\OpenCVEngineInterface.aidl
+ * Original file: D:\\studioD\\repository\\googleADK\\AIAndroid\\MyApplication2\\openCVLibrary24135\\src\\main\\aidl\\org\\opencv\\engine\\OpenCVEngineInterface.aidl
  */
 package org.opencv.engine;
 /**

@@ -24,9 +24,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".activity.AnyScanActivity">
+        <!--<activity android:name=".activity.AnyScanActivity">-->
 
-        </activity>
+        <!--</activity>-->
 
         <activity
             android:name=".activity.MainActivity"
