@@ -130,16 +130,6 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
         initCamera();
     }
 
-
-
-
-
-
-
-
-
-
-
     /**
      * OpenCV
      */
