@@ -64,15 +64,21 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
      */
     private static final String TAG = "MainActivity";
 
+
     private HandDetection handDetection;
     private TextView displayDebugMsg;
+    public int mode;
+    public int leftSpeed;
+    public int rightSpeed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_main);
-
+        mode=0;
+        leftSpeed=0;
+        rightSpeed=0;
         initDebug();
         initBlueTooth();
     }
@@ -169,11 +175,14 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
             } else if (msg.what == 2) {
                 BLE_start_writer();
             }
+            else if (msg.what == 3) {
+                writer(mode,leftSpeed,rightSpeed);
+            }
             super.handleMessage(msg);
         }
     };
 
-    public String protocol(int protocol_data) {
+    public String protocol(int protocol_data) { //自定义协议
         String protocol_msg = "";
         if (protocol_data >= 0 && 100 > protocol_data) {
             protocol_msg = Integer.toHexString(30) + Integer.toHexString(protocol_data + 30);
@@ -193,6 +202,7 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
                     @Override
                     public void onSuccess(final BluetoothGattCharacteristic characteristic) {
                         //成功写入操作
+                        StartWriteing(200);
                     }
 
                     @Override
@@ -240,6 +250,9 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
         service = mBluetoothService.getService();
         mBluetoothService.setCharacteristic((service.getCharacteristics().get(service.getCharacteristics().size() - 2)));
         mBluetoothService.setCharaProp(1);
+        Message msg = new Message();
+        msg.what = 3;
+        bthHandler.sendMessage(msg);
     }
 
     private void BLE_start_listener() {
@@ -299,7 +312,17 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
     }
 
 
-
+    private void StartWriteing(int time ) {
+        Timer timer=new Timer();
+        TimerTask task=new TimerTask(){
+            public void run(){
+                Message msg=new Message();
+                msg.what=3;
+                bthHandler.sendMessage(msg);
+            }
+        };
+        timer.schedule(task, time);
+    }
 
 
 
@@ -393,10 +416,11 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
         public void handleMessage(Message msg) {
             if (msg.what == 0) {
                 displayDebugMsg.setText(msg.getData().getString("TrafficSign"));
-//                writer(0, 0, 0);
+                leftSpeed=0;rightSpeed=0;mode=0;
             } else if (msg.what == 1) {
                 displayDebugMsg.setText("直行");
-                writer(5, 50, 50);
+                mode=5;leftSpeed=50;rightSpeed=50;
+
             }
             super.handleMessage(msg);
         }
