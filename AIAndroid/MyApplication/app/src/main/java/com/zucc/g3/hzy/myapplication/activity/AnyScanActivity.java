@@ -262,7 +262,7 @@ public class AnyScanActivity extends AppCompatActivity implements View.OnClickLi
         @Override
         public void onServicesDiscovered() {
             progressDialog.dismiss();
-            startActivity(new Intent(AnyScanActivity.this, MainActivity.class));
+            startActivity(new Intent(AnyScanActivity.this, MidActivity.class));
         }
     };
 

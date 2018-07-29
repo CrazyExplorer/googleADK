@@ -38,6 +38,17 @@
         </activity>
 
 
+        <activity
+            android:name=".activity.MidActivity">
+
+        </activity>
+
+        <activity
+            android:name=".activity.HandleActivity">
+
+        </activity>
+
+
 
         <service android:name=".bth.BluetoothService" />
     </application>
