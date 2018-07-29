@@ -1,6 +1,6 @@
 package com.zucc.g3.hzy.myapplication.activity;
 
-import android.Manifest;
+
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
@@ -8,12 +8,12 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.content.pm.PackageManager;
+
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
-import android.support.v4.content.ContextCompat;
+
 import android.support.v7.app.AppCompatActivity;
 import android.view.WindowManager;
 

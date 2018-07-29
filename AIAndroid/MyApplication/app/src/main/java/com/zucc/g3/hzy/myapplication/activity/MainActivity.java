@@ -109,7 +109,7 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
         if (openCvCameraView != null) {
             openCvCameraView.disableView();
         }
-//        unbindService();
+        unbindService();
     }
 
     private void initDebug() {
