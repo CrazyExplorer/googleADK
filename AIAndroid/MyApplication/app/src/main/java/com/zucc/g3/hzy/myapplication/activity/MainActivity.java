@@ -403,6 +403,7 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
             message.setData(bundle);
             message.what = 0;
             controlHandler.sendMessage(message);
+
         } else {
             controlHandler.sendEmptyMessage(1);
         }
