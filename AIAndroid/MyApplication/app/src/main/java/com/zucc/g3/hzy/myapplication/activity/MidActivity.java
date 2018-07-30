@@ -39,6 +39,10 @@ public class MidActivity extends AppCompatActivity  implements View.OnClickListe
         if(v==developer_mode){
             startActivity(new Intent(MidActivity.this, DevelopeActivity.class));
         }
+
+        if(v==gravity_handle){
+            startActivity(new Intent(MidActivity.this, GravityActivity.class));
+        }
     }
 
     private void initView() {
