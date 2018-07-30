@@ -17,6 +17,7 @@ public class MidActivity extends AppCompatActivity  implements View.OnClickListe
     private Button object_detection;
     private Button handle;
     private Button gravity_handle;
+    private Button developer_mode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +35,10 @@ public class MidActivity extends AppCompatActivity  implements View.OnClickListe
         if(v==object_detection){
             startActivity(new Intent(MidActivity.this, MainActivity.class));
         }
+
+        if(v==developer_mode){
+            startActivity(new Intent(MidActivity.this, DevelopeActivity.class));
+        }
     }
 
     private void initView() {
@@ -49,6 +54,8 @@ public class MidActivity extends AppCompatActivity  implements View.OnClickListe
         gravity_handle = (Button) findViewById(R.id.gravity_handle);
         gravity_handle.setOnClickListener(this);
 
+        developer_mode = (Button) findViewById(R.id.developer_mode);
+        developer_mode.setOnClickListener(this);
 
 
     }

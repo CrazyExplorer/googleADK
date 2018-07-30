@@ -47,6 +47,11 @@
             android:name=".activity.HandleActivity">
 
         </activity>
+        <activity
+            android:name=".activity.DevelopeActivity">
+
+        </activity>
+
 
 
 
