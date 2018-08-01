@@ -6,6 +6,31 @@
     android:layout_height="495dp"
     android:orientation="vertical">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="服务器地址"/>
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/broker"
+            android:text="123.206.127.199:1883"
+            android:lines="1"
+            android:layout_weight="1"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/brokerButton"
+            android:text="连接"/>
+
+    </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -23,6 +48,7 @@
             android:layout_weight="1"/>
 
     </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"

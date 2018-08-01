@@ -25,7 +25,7 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
 public class MqttActivity extends Activity  implements Button.OnClickListener{
 
-    private final static String host="123.206.127.199:1883";
+    private  String host="123.206.127.199:1883";
     private final static String username="";
     private final static String password="";
 
@@ -35,15 +35,17 @@ public class MqttActivity extends Activity  implements Button.OnClickListener{
     private final static int FAIL=3;
     private final static int RECEIVE=4;
 
-    private EditText pubTopic,pubMsg,subTopic;
+    private EditText pubTopic,pubMsg,subTopic,broker;
     private TextView subMsg;
-    private Button pubButton,subButton,clearButton;
+    private Button pubButton,subButton,clearButton,brokerButton;
     private MqttAsyncClient mqttClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mqtt);
+
+        broker=(EditText)findViewById(R.id.broker);
         pubTopic=(EditText)findViewById(R.id.pubTopic);
         pubMsg=(EditText)findViewById(R.id.pubMessage);
         subTopic=(EditText)findViewById(R.id.subTopic);
@@ -51,10 +53,12 @@ public class MqttActivity extends Activity  implements Button.OnClickListener{
         pubButton=(Button)findViewById(R.id.pubButton);
         subButton=(Button)findViewById(R.id.subButton);
         clearButton=(Button)findViewById(R.id.clearButton);
+        brokerButton=(Button)findViewById(R.id.brokerButton);
         pubButton.setOnClickListener(this);
         subButton.setOnClickListener(this);
         clearButton.setOnClickListener(this);
-        connectBroker();
+        brokerButton.setOnClickListener(this);
+
     }
 
     private Handler handler=new Handler(){
@@ -144,7 +148,13 @@ public class MqttActivity extends Activity  implements Button.OnClickListener{
     @Override
     public void onClick(View v) {
 
-        if(v==pubButton){
+
+        if(v==brokerButton){
+            if(broker.getText().toString().length()>0) {
+                host=broker.getText().toString();
+                connectBroker();
+            }
+        }else if(v==pubButton){
             if(pubTopic.getText().toString().length()>0) {
                 try {
                     mqttClient.publish(pubTopic.getText().toString(), pubMsg.getText().toString().getBytes(), 1, false);
