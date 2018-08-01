@@ -25,7 +25,7 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
 public class MqttActivity extends Activity  implements Button.OnClickListener{
 
-    private  String host="123.206.127.199:1883";
+    private  String host="192.168.253.1:1883";
     private final static String username="";
     private final static String password="";
 
