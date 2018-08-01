@@ -64,7 +64,10 @@
             android:name=".activity.MqttActivity">
         </activity>
 
-
+        <activity
+            android:name=".activity.CollectActivity"
+            android:screenOrientation="landscape">
+        </activity>
 
 
 

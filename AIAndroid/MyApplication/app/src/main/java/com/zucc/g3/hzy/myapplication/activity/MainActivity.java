@@ -12,6 +12,7 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
 
     private Button bluetooth;
     private Button mqtt;
+    private Button collect;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,9 +28,12 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
             startActivity(new Intent(MainActivity.this, AnyScanActivity.class));
         }
 
-
         if(v==mqtt){
             startActivity(new Intent(MainActivity.this, MqttActivity.class));
+        }
+
+        if(v==collect){
+            startActivity(new Intent(MainActivity.this, CollectActivity.class));
         }
     }
 
@@ -42,6 +46,9 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
 
         mqtt = (Button) findViewById(R.id.mqtt);
         mqtt.setOnClickListener(this);
+
+        collect = (Button) findViewById(R.id.collect);
+        collect.setOnClickListener(this);
     }
 }
 
