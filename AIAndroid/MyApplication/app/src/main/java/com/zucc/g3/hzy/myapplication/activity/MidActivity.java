@@ -33,7 +33,7 @@ public class MidActivity extends AppCompatActivity  implements View.OnClickListe
         }
 
         if(v==object_detection){
-            startActivity(new Intent(MidActivity.this, MainActivity.class));
+            startActivity(new Intent(MidActivity.this, ObjActivity.class));
         }
 
         if(v==developer_mode){

@@ -23,7 +23,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".activity.AnyScanActivity">
+
+
+        <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -31,16 +33,19 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".activity.MainActivity"
-            android:screenOrientation="landscape">
 
+        <activity
+            android:name=".activity.AnyScanActivity">
+        </activity>
+
+        <activity
+            android:name=".activity.ObjActivity"
+            android:screenOrientation="landscape">
         </activity>
 
 
         <activity
             android:name=".activity.MidActivity">
-
         </activity>
 
         <activity
@@ -49,13 +54,16 @@
         </activity>
         <activity
             android:name=".activity.DevelopeActivity">
-
         </activity>
 
         <activity
             android:name=".activity.GravityActivity">
-
         </activity>
+
+        <activity
+            android:name=".activity.MqttActivity">
+        </activity>
+
 
 
 
