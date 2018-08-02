@@ -10,7 +10,7 @@
 
 const char* ssid = "Ubilabs";//路由器ssid
 const char* password = "googleiot";//路由器密码
-const char* mqtt_server = "123.206.127.199";//服务器的地址
+const char* mqtt_server = "192.168.253.1";//服务器的地址
 
 
 //全局变量区域上界
@@ -40,7 +40,7 @@ int OTAS=0;
 long lastMsg = 0;//存放时间的变量 
 char msg[200];//存放要发的数据
 String load;
-
+String sign="redlight";
 
 void setup_wifi() {//自动连WIFI接入网络
   delay(10);
@@ -166,12 +166,27 @@ void encodeJson(){
 
 
   //添加其他要发送的JSON包就像这样下面这句代码
-  root1["back"] = "OTA";
+  root1["sign"] = sign;
 
 
   //发送数据区下界
   root1.printTo(msg);
   }
+
+void encodeJson2CAR(){
+  DynamicJsonBuffer jsonBuffer;
+  JsonObject& root1 = jsonBuffer.createObject();
+  //发送数据区上界
+
+
+  //添加其他要发送的JSON包就像这样下面这句代码
+  root1["sign"] = "1";
+
+
+  //发送数据区下界
+  root1.printTo(msg);
+  }
+  
 void us100(){
      int soft_time=100;
      long now1 = millis();
@@ -208,7 +223,9 @@ void trigger(int filtration_time){
       
       lastMsg_async[2]=now2;
      encodeJson();
-     client.publish("OTAback",msg);//以OTA为TOPIC对外发送MQTT消息
+     client.publish("InnoCamp18/TSD/pending",msg);//以OTA为TOPIC对外发送MQTT消息
+     encodeJson2CAR();
+     client.publish("InnoCamp18/TSD/sign",msg);//以OTA为TOPIC对外发送MQTT消息
     }
     if(distance>=threshold&&op[0]==1){
       op[0]=0;

@@ -69,7 +69,15 @@
             android:screenOrientation="landscape">
         </activity>
 
+        <activity
+            android:name=".activity.ObjGameActivity"
+            android:screenOrientation="landscape">
+        </activity>
 
+
+        <activity
+            android:name=".activity.ObjGameSettingActivity">
+        </activity>
 
         <service android:name=".bth.BluetoothService" />
     </application>
