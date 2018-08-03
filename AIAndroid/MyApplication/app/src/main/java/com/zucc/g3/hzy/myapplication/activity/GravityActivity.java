@@ -193,6 +193,7 @@ public class GravityActivity  extends AppCompatActivity {
                 BLE_start_writer();
             }
             else if (msg.what == 3) {
+
                 writer(mode,leftSpeed,rightSpeed);
             }
             super.handleMessage(msg);
