@@ -517,8 +517,8 @@ public class ObjGameActivity extends Activity implements CameraBridgeViewBase.Cv
                         JSONObject obj = new JSONObject();
                         try {
                             obj.put("UserName", UserName);
-                            obj.put("Answer", Sign+":"+probability);
-
+                            obj.put("Answer", Sign);
+                            obj.put("Probability", probability);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
