@@ -30,6 +30,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
+        <activity
+            android:name=".activity.AnyScanActivity">
+        </activity>
+
+        <activity
+            android:name=".activity.DevelopeActivity">
+        </activity>
+
+        <activity
+            android:name=".activity.MidActivity">
+        </activity>
+
+        <service android:name=".bth.BluetoothService" />
+
     </application>
 
 </manifest>
