@@ -14,7 +14,7 @@ import org.blackwalnutlabs.hzy.aicar.R;
 public class MidActivity extends AppCompatActivity  implements View.OnClickListener {
 
 
-
+    private Button handle;
     private Button developer_mode;
 
 
@@ -28,7 +28,9 @@ public class MidActivity extends AppCompatActivity  implements View.OnClickListe
     @Override
     public void onClick(View v) {
 
-
+        if(v==handle){
+            startActivity(new Intent(MidActivity.this, HandleActivity.class));
+        }
         if(v==developer_mode){
             startActivity(new Intent(MidActivity.this, DevelopeActivity.class));
         }
@@ -43,6 +45,8 @@ public class MidActivity extends AppCompatActivity  implements View.OnClickListe
 
 
 
+        handle = (Button) findViewById(R.id.handle);
+        handle.setOnClickListener(this);
 
         developer_mode = (Button) findViewById(R.id.developer_mode);
         developer_mode.setOnClickListener(this);

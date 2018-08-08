@@ -1,5 +1,6 @@
 package org.blackwalnutlabs.hzy.aicar.activity;
 
+
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
@@ -7,101 +8,111 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
 
-import android.view.View;
+import android.support.v7.app.AppCompatActivity;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 
 import org.blackwalnutlabs.hzy.aicar.R;
 import org.blackwalnutlabs.hzy.aicar.bth.BluetoothService;
 import org.blackwalnutlabs.hzy.aicar.bth.conn.BleCharacterCallback;
 import org.blackwalnutlabs.hzy.aicar.bth.exception.BleException;
-import org.blackwalnutlabs.hzy.aicar.bth.utils.HexUtil;
-
+import org.blackwalnutlabs.hzy.aicar.view.HandleView;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class DevelopeActivity extends AppCompatActivity {
-
+public class HandleActivity extends AppCompatActivity {
     public int mode;
     public int leftSpeed;
     public int rightSpeed;
 
-    private String back="";
-    private TextView backtxt,LPWM,RPWM,RSpeed,LSpeed;
-    private Button pubbt;
-    private EditText p1,p2,p3;
+    private HandleView rocter;
 
-    private int PWML=0,PWMR=0,SpeedL=0,SpeedR=0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        setContentView(R.layout.activity_developer);
+        setContentView(R.layout.activity_handle);
         mode=0;
         leftSpeed=0;
         rightSpeed=0;
-        backtxt=(TextView)findViewById(R.id.txt_read);
-        LPWM=(TextView)findViewById(R.id.LPWM);
-        RPWM=(TextView)findViewById(R.id.RPWM);
-        RSpeed=(TextView)findViewById(R.id.RSpeed);
-        LSpeed=(TextView)findViewById(R.id.LSpeed);
-        p1=(EditText)findViewById(R.id.p1);
-        p2=(EditText)findViewById(R.id.p2);
-        p3=(EditText)findViewById(R.id.p3);
-        pubbt=(Button)findViewById(R.id.write_bt);
+        initRocter();
         initBlueTooth();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mode=0;leftSpeed=0;rightSpeed=0;
-        writer(mode,leftSpeed,rightSpeed);
+
         unbindService();
     }
 
-    /**
-     * 协议
-     */
-    private void analysisMSG(String msg){
-        try{
-            PWML =Integer.parseInt(msg.substring(msg.indexOf("a")+1, msg.indexOf("b")));
-            PWMR =Integer.parseInt(msg.substring(msg.indexOf("b")+1, msg.indexOf("c")));
-            SpeedL =Integer.parseInt(msg.substring(msg.indexOf("c")+1, msg.indexOf("d")));
-            SpeedR =Integer.parseInt(msg.substring(msg.indexOf("d")+1));
-        }catch (Exception e){
-            return;
+
+/**
+ * 手柄设置
+ */
+private void initRocter() {
+    rocter=(HandleView)findViewById(R.id.picker);
+    rocter.setTXT("");
+    rocter.setTxtColor("#0099cc");
+    rocter.setLowerBound(0);
+    rocter.setUpperBound(362);
+    rocter.setTextSize(18);
+    rocter.setInnerColor("#cccc66");
+    rocter.setValueSetColor("#666699");
+}
+
+    private void hand_control(int angle,int maxsped){
+        if(0<angle&&angle<=90){
+            float factor= (float) ((90-angle)/90.0);
+            mode=5;
+            leftSpeed=maxsped;
+            rightSpeed= (int)(maxsped*factor);
+        }
+        if(90<angle&&angle<=180){
+            float factor=(float)((angle-90)/90.0);
+            mode=4;
+            leftSpeed=maxsped;
+            rightSpeed=(int)(maxsped*factor);
+        }
+        if(180<angle&&angle<=270){
+            float factor=(float)((angle-180)/90.0);
+            mode=4;
+            leftSpeed=(int)(maxsped*factor);
+            rightSpeed=maxsped;
+        }
+        if(270<angle&&angle<=360){
+            float factor=(float)((angle-270)/90.0);
+            mode=5;
+            leftSpeed= (int) (maxsped*factor);
+            rightSpeed=maxsped;
+        }
+        if(angle<=-1){
+            leftSpeed=0;
+            rightSpeed=0;
+            mode=5;
         }
     }
-    public String protocol(int protocol_data) { //自定义协议
-        String protocol_msg = "";
-        if (protocol_data >= 0 && 100 > protocol_data) {
-            protocol_msg = Integer.toHexString(30) + Integer.toHexString(protocol_data + 30);
-        } else if (protocol_data < 10000 && protocol_data >= 100) {
-            protocol_msg = Integer.toHexString(protocol_data / 100 + 30) + Integer.toHexString(protocol_data % 100 + 30);
-        }
-        return protocol_msg;
-    }
+
 
     /**
      * BlueTooth
@@ -131,6 +142,15 @@ public class DevelopeActivity extends AppCompatActivity {
         }
     };
 
+    public String protocol(int protocol_data) { //自定义协议
+        String protocol_msg = "";
+        if (protocol_data >= 0 && 100 > protocol_data) {
+            protocol_msg = Integer.toHexString(30) + Integer.toHexString(protocol_data + 30);
+        } else if (protocol_data < 10000 && protocol_data >= 100) {
+            protocol_msg = Integer.toHexString(protocol_data / 100 + 30) + Integer.toHexString(protocol_data % 100 + 30);
+        }
+        return protocol_msg;
+    }
 
     private void writer(int controlMode, int targetL, int targetR) { //仅仅用于发送小车动作控制命令
         final BluetoothGattCharacteristic characteristic = mBluetoothService.getCharacteristic();
@@ -181,18 +201,6 @@ public class DevelopeActivity extends AppCompatActivity {
         timer.schedule(task, time);
     }
 
-    private void StartWriteing(int time ) {
-        Timer timer=new Timer();
-        TimerTask task=new TimerTask(){
-            public void run(){
-                Message msg=new Message();
-                msg.what=3;
-                bthHandler.sendMessage(msg);
-            }
-        };
-        timer.schedule(task, time);
-    }
-
     private void getService() {
         gatt = mBluetoothService.getGatt();
         mBluetoothService.setService(gatt.getServices().get(gatt.getServices().size() - 1));
@@ -205,15 +213,15 @@ public class DevelopeActivity extends AppCompatActivity {
         Message msg = new Message();
         msg.what = 3;
         bthHandler.sendMessage(msg);
-
-        pubbt.setOnClickListener(new View.OnClickListener() {
+        rocter.setRockerChangeListener(new HandleView.RockerChangeListener() {
             @Override
-            public void onClick(View view) {
-                mode=Integer.parseInt(p1.getText().toString());
-                leftSpeed=Integer.parseInt(p2.getText().toString());
-                rightSpeed=Integer.parseInt(p3.getText().toString());
+            public void report(float value) {
+
+                hand_control(rocter.angleResult,130);
             }
         });
+
+
     }
 
     private void BLE_start_listener() {
@@ -228,23 +236,13 @@ public class DevelopeActivity extends AppCompatActivity {
 
                     @Override
                     public void onSuccess(final BluetoothGattCharacteristic characteristic) {
-                        DevelopeActivity.this.runOnUiThread(() -> {
-
-                            String hexEncode=(String.valueOf(HexUtil.encodeHex(characteristic.getValue())));//得到16进制字符串
-                            byte[] bytes= HexUtil.hexStringToBytes(hexEncode);//转为byte类型
-                            back=(""+new String(bytes));//解出字符串
-                            analysisMSG(back);
-                            backtxt.setText("原数据:"+back);
-                            LPWM.setText("Lpwm:"+PWML);
-                            RPWM.setText("Rpwm:"+PWMR);
-                            LSpeed.setText("Lspeed:"+SpeedL);
-                            RSpeed.setText("Rspeed:"+SpeedR);
+                        HandleActivity.this.runOnUiThread(() -> {
                         });
                     }
 
                     @Override
                     public void onFailure(final BleException exception) {
-                        DevelopeActivity.this.runOnUiThread(() -> {
+                        HandleActivity.this.runOnUiThread(() -> {
                             StartBLEListenerAfter(100);//重新开始监听
                         });
                     }
@@ -282,5 +280,16 @@ public class DevelopeActivity extends AppCompatActivity {
         this.unbindService(mFhrSCon);
     }
 
+    private void StartWriteing(int time ) {
+        Timer timer=new Timer();
+        TimerTask task=new TimerTask(){
+            public void run(){
+                Message msg=new Message();
+                msg.what=3;
+                bthHandler.sendMessage(msg);
+            }
+        };
+        timer.schedule(task, time);
+    }
 
 }
