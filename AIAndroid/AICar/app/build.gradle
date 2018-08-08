@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 27
     defaultConfig {
-        applicationId "com.zucc.g3.hzy.myapplication"
+        applicationId "org.blackwalnutlabs.hzy.aicar"
         minSdkVersion 19
         targetSdkVersion 27
         versionCode 1
@@ -28,7 +28,7 @@ android {
     }
     externalNativeBuild {
         ndkBuild {
-            path 'D:/Program/AS/opencvandroid/OpenCV-android-sdk/sdk/native/jni/OpenCV.mk' // 改成你的OpenCV库
+//            path 'D:/Program/AS/opencvandroid/OpenCV-android-sdk/sdk/native/jni/OpenCV.mk' // 改成你的OpenCV库
         }
     }
 }

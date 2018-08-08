@@ -31,7 +31,6 @@ import java.util.TimerTask;
 
 public class DevelopeActivity extends AppCompatActivity {
 
-
     public int mode;
     public int leftSpeed;
     public int rightSpeed;
@@ -41,10 +40,7 @@ public class DevelopeActivity extends AppCompatActivity {
     private Button pubbt;
     private EditText p1,p2,p3;
 
-
     private int PWML=0,PWMR=0,SpeedL=0,SpeedR=0;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,12 +75,13 @@ public class DevelopeActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        mode=0;leftSpeed=0;rightSpeed=0;
+        writer(mode,leftSpeed,rightSpeed);
         unbindService();
     }
 
-
     /**
-     * 功能
+     * 协议
      */
     private void analysisMSG(String msg){
         try{
@@ -96,7 +93,15 @@ public class DevelopeActivity extends AppCompatActivity {
             return;
         }
     }
-
+    public String protocol(int protocol_data) { //自定义协议
+        String protocol_msg = "";
+        if (protocol_data >= 0 && 100 > protocol_data) {
+            protocol_msg = Integer.toHexString(30) + Integer.toHexString(protocol_data + 30);
+        } else if (protocol_data < 10000 && protocol_data >= 100) {
+            protocol_msg = Integer.toHexString(protocol_data / 100 + 30) + Integer.toHexString(protocol_data % 100 + 30);
+        }
+        return protocol_msg;
+    }
 
     /**
      * BlueTooth
@@ -126,15 +131,7 @@ public class DevelopeActivity extends AppCompatActivity {
         }
     };
 
-    public String protocol(int protocol_data) { //自定义协议
-        String protocol_msg = "";
-        if (protocol_data >= 0 && 100 > protocol_data) {
-            protocol_msg = Integer.toHexString(30) + Integer.toHexString(protocol_data + 30);
-        } else if (protocol_data < 10000 && protocol_data >= 100) {
-            protocol_msg = Integer.toHexString(protocol_data / 100 + 30) + Integer.toHexString(protocol_data % 100 + 30);
-        }
-        return protocol_msg;
-    }
+
 
     private void writer(int controlMode, int targetL, int targetR) { //仅仅用于发送小车动作控制命令
         final BluetoothGattCharacteristic characteristic = mBluetoothService.getCharacteristic();
@@ -185,6 +182,18 @@ public class DevelopeActivity extends AppCompatActivity {
         timer.schedule(task, time);
     }
 
+    private void StartWriteing(int time ) {
+        Timer timer=new Timer();
+        TimerTask task=new TimerTask(){
+            public void run(){
+                Message msg=new Message();
+                msg.what=3;
+                bthHandler.sendMessage(msg);
+            }
+        };
+        timer.schedule(task, time);
+    }
+
     private void getService() {
         gatt = mBluetoothService.getGatt();
         mBluetoothService.setService(gatt.getServices().get(gatt.getServices().size() - 1));
@@ -204,7 +213,6 @@ public class DevelopeActivity extends AppCompatActivity {
                 mode=Integer.parseInt(p1.getText().toString());
                 leftSpeed=Integer.parseInt(p2.getText().toString());
                 rightSpeed=Integer.parseInt(p3.getText().toString());
-
             }
         });
     }
@@ -275,15 +283,5 @@ public class DevelopeActivity extends AppCompatActivity {
         this.unbindService(mFhrSCon);
     }
 
-    private void StartWriteing(int time ) {
-        Timer timer=new Timer();
-        TimerTask task=new TimerTask(){
-            public void run(){
-                Message msg=new Message();
-                msg.what=3;
-                bthHandler.sendMessage(msg);
-            }
-        };
-        timer.schedule(task, time);
-    }
+
 }

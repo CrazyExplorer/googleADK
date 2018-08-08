@@ -58,7 +58,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="第一个数" />
+        android:text="mode" />
 
     <EditText
         android:id="@+id/p1"
@@ -73,7 +73,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="第二个数" />
+        android:text="leftSpeed" />
 
     <EditText
         android:id="@+id/p2"
@@ -88,7 +88,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="第三个数" />
+        android:text="rightSpeed" />
 
     <EditText
         android:id="@+id/p3"
