@@ -1,26 +1,18 @@
 package org.blackwalnutlabs.hzy.aicar.view;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.Rect;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import org.blackwalnutlabs.hzy.aicar.R;
 
 public class HandleView  extends View {
-
-
-    private float viewSize_X;
-    private float viewSize_Y;
 
     //固定摇杆背景圆形的X,Y坐标以及半径
     private float mRockerBg_X;
@@ -33,30 +25,15 @@ public class HandleView  extends View {
     private Bitmap mBmpRockerBg;
     private Bitmap mBmpRockerBtn;
     private PointF mCenterPoint;
+    private int lowerBound;
+    private int upperBound;
 
-
-    private Paint innerPaint;
-    private Paint textPaint,valueSetPaint;
-    private ParseUtil parseUtil;
-    private int openTime= (Integer.MAX_VALUE);
-
-
-
-    private boolean launched=true;//以及被发送了
-    private int lowerBound=2;
-    private int upperBound=100;
-    private int region=98;
     public int angleResult= (Integer.MAX_VALUE);
-    private String txtA="";
-    private int textSize=14;
-    private String txtColor="#59a9ff";
-    private String innerColor="#000000";
-    private String valueSetColor="#000000";
 
     public HandleView(Context context, AttributeSet attrs) {
         super(context, attrs);
         // TODO Auto-generated constructor stub
-        parseUtil = new ParseUtil(context);
+
         // 获取bitmap
         mBmpRockerBg = BitmapFactory.decodeResource(context.getResources(), R.drawable.rocker_bg_gray);
         mBmpRockerBtn = BitmapFactory.decodeResource(context.getResources(), R.drawable.rocker_btn_blc);
@@ -65,11 +42,7 @@ public class HandleView  extends View {
         getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
             @Override
             public boolean onPreDraw() {
-
                 getViewTreeObserver().removeOnPreDrawListener(this);
-
-//                viewSize_X=getWidth()/2;
-//                viewSize_Y=getHeight()/2;
                 mCenterPoint = new PointF(getWidth() / 2, getHeight() / 2);
                 mRockerBg_X = mCenterPoint.x;
                 mRockerBg_Y = mCenterPoint.y;
@@ -81,7 +54,6 @@ public class HandleView  extends View {
                 return true;
             }
         });
-
 
         new Thread(new Runnable() {
             @Override
@@ -99,8 +71,6 @@ public class HandleView  extends View {
                 }
             }
         }).start();
-
-        init();
     }
 
     private void map(float x,float y){//映射
@@ -111,10 +81,6 @@ public class HandleView  extends View {
         {
             upperBound=100;
             lowerBound=2;
-        }
-        else
-        {
-            region=perRegion;
         }
         if(x<=0){
             angle= (int) Math.toDegrees(Math.atan(y / x))+90+180;
@@ -141,60 +107,10 @@ public class HandleView  extends View {
                         (int)(mRockerBtn_X + mRockerBtn_R),
                         (int)(mRockerBtn_Y + mRockerBtn_R)),
                 null);
-        innerPaint.setColor(Color.parseColor(innerColor));
-        valueSetPaint.setColor(Color.parseColor(valueSetColor));
-        valueSetPaint.setTextSize(parseUtil.sp2px(textSize));
-        valueSetPaint.setTextAlign(Paint.Align.CENTER);
-        canvas.drawCircle( mCenterPoint.x,  mCenterPoint.y,parseUtil.dp2px((int)(viewSize_X/7.1)), innerPaint);
-
-
-        if(openTime== (Integer.MAX_VALUE))
-        {
-            textPaint.setColor(Color.parseColor("#ff0000"));
-            textPaint.setTextSize(parseUtil.sp2px(textSize+2));
-            textPaint.setTextAlign(Paint.Align.CENTER);
-            canvas.drawText("", mCenterPoint.x, mCenterPoint.y, textPaint);
-            canvas.drawText("", mCenterPoint.x, mCenterPoint.y, valueSetPaint);
-        }
-        else
-        {
-            if(angleResult< (Integer.MAX_VALUE))
-            {
-                textPaint.setColor(Color.parseColor(txtColor.toString()));
-                textPaint.setTextSize(parseUtil.sp2px(textSize));
-                textPaint.setTextAlign(Paint.Align.CENTER);
-                canvas.drawText(txtA, mCenterPoint.x, mCenterPoint.y+parseUtil.dp2px((int)viewSize_Y/40), textPaint);
-                canvas.drawText("设置为"+angleResult, mCenterPoint.x, mCenterPoint.y-parseUtil.dp2px((int)viewSize_Y/30), valueSetPaint);
-            }
-            else
-            {
-                textPaint.setColor(Color.parseColor(txtColor.toString()));
-                textPaint.setTextSize(parseUtil.sp2px(textSize)+4);
-                textPaint.setTextAlign(Paint.Align.CENTER);
-                canvas.drawText(txtA, mCenterPoint.x, mCenterPoint.y, textPaint);
-                canvas.drawText("", mCenterPoint.x, mCenterPoint.y, valueSetPaint);
-            }
-        }
-
-    }
-
-    private void init() {
-        innerPaint = new Paint();//画内圆的画笔
-        innerPaint.setAntiAlias(true);
-        innerPaint.setStyle(Paint.Style.FILL);
-
-        textPaint = new Paint();//画文本的画笔
-        textPaint.setAntiAlias(true);
-        textPaint.setStyle(Paint.Style.FILL);
-
-        valueSetPaint = new Paint();//画文本的画笔
-        valueSetPaint.setAntiAlias(true);
-        valueSetPaint.setStyle(Paint.Style.FILL);
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-
         if (event.getAction() == MotionEvent.ACTION_DOWN || event.getAction() == MotionEvent.ACTION_MOVE) {
             // 当触屏区域不在活动范围内
             if (Math.sqrt(Math.pow((mRockerBg_X - (int) event.getX()), 2) + Math.pow((mRockerBg_Y - (int) event.getY()), 2)) >= mRockerBg_R) {
@@ -202,11 +118,9 @@ public class HandleView  extends View {
                 double tempRad = getRad(mRockerBg_X, mRockerBg_Y, event.getX(), event.getY());
                 //保证内部小圆运动的长度限制
                 getXY(mRockerBg_X, mRockerBg_Y, mRockerBg_R, tempRad);
-                launched=false;
             } else {//如果小球中心点小于活动区域则随着用户触屏点移动即可
                 double tempRad = getRad(mRockerBg_X, mRockerBg_Y, event.getX(), event.getY());
                 getXY(mRockerBg_X, mRockerBg_Y, mRockerBg_R, tempRad);
-                launched=false;
             }
             if(mRockerChangeListener != null) {
                 map(mRockerBtn_X - mCenterPoint.x, mRockerBtn_Y - mCenterPoint.y);
@@ -217,10 +131,9 @@ public class HandleView  extends View {
         {
             mRockerBtn_X = mCenterPoint.x;
             mRockerBtn_Y = mCenterPoint.y;
-
             angleResult=-777;
             if(mRockerChangeListener != null) {
-                mRockerChangeListener.report(0);
+                mRockerChangeListener.report(angleResult);
             }
         }
         return true;
@@ -255,42 +168,11 @@ public class HandleView  extends View {
     }
 
 
-
-
-
-    public void setOpenTime(int openTime) {
-        this.openTime = openTime;
-    }
     public void setLowerBound(int lowerBound) {
         this.lowerBound = lowerBound;
     }
     public void setUpperBound(int upperBound) {
         this.upperBound = upperBound;
-    }
-    public void setTXT(String txt) {
-        this.txtA = txt;
-    }
-    public void setTextSize(int textSize) {
-        this.textSize = textSize;
-    }
-    public void setTxtColor(String color){
-        this.txtColor=color;
-    }
-    public void setInnerColor(String color){
-        this.innerColor=color;
-    }
-    public void setValueSetColor(String color){
-        this.valueSetColor=color;
-    }
-
-
-
-
-    public void senting(){//发送完毕
-        mRockerBtn_X = mCenterPoint.x;
-        mRockerBtn_Y = mCenterPoint.y;
-        angleResult= (Integer.MAX_VALUE);
-        mRockerChangeListener.report(angleResult);
     }
 
     RockerChangeListener mRockerChangeListener = null;
@@ -298,8 +180,7 @@ public class HandleView  extends View {
         mRockerChangeListener = rockerChangeListener;
     }
 
-
     public interface RockerChangeListener {
-        public void report(float value);
+        public void report(int value);
     }
 }

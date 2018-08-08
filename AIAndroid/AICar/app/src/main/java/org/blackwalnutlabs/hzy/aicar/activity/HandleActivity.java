@@ -15,6 +15,7 @@ import android.os.IBinder;
 import android.os.Message;
 
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.WindowManager;
 
 import org.blackwalnutlabs.hzy.aicar.R;
@@ -30,10 +31,7 @@ public class HandleActivity extends AppCompatActivity {
     public int mode;
     public int leftSpeed;
     public int rightSpeed;
-
     private HandleView rocter;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,16 +68,11 @@ public class HandleActivity extends AppCompatActivity {
 /**
  * 手柄设置
  */
-private void initRocter() {
-    rocter=(HandleView)findViewById(R.id.picker);
-    rocter.setTXT("");
-    rocter.setTxtColor("#0099cc");
-    rocter.setLowerBound(0);
-    rocter.setUpperBound(362);
-    rocter.setTextSize(18);
-    rocter.setInnerColor("#cccc66");
-    rocter.setValueSetColor("#666699");
-}
+    private void initRocter() {
+        rocter=(HandleView)findViewById(R.id.picker);
+        rocter.setLowerBound(0);
+        rocter.setUpperBound(362);
+    }
 
     private void hand_control(int angle,int maxsped){
         if(0<angle&&angle<=90){
@@ -112,7 +105,6 @@ private void initRocter() {
             mode=5;
         }
     }
-
 
     /**
      * BlueTooth
@@ -215,13 +207,12 @@ private void initRocter() {
         bthHandler.sendMessage(msg);
         rocter.setRockerChangeListener(new HandleView.RockerChangeListener() {
             @Override
-            public void report(float value) {
+            public void report(int value) {
+//                Log.i("rocterdge", "report1: "+value);
 
-                hand_control(rocter.angleResult,130);
+                hand_control(value,100);
             }
         });
-
-
     }
 
     private void BLE_start_listener() {
