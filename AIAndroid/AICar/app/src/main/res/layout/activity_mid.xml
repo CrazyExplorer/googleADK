@@ -18,5 +18,11 @@
         android:text="遥控手柄"
         android:id="@+id/handle"/>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="重力控制"
+        android:id="@+id/gravity_handle"/>
+
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

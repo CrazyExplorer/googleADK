@@ -48,6 +48,9 @@
             android:name=".activity.HandleActivity">
         </activity>
 
+        <activity
+            android:name=".activity.GravityActivity">
+        </activity>
         <service android:name=".bth.BluetoothService" />
 
     </application>

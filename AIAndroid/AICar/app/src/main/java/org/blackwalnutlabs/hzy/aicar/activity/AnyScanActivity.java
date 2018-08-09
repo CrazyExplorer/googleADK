@@ -42,8 +42,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-
-
 public class AnyScanActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Button btn_start, btn_stop;

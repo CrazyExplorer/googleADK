@@ -16,6 +16,7 @@ public class MidActivity extends AppCompatActivity  implements View.OnClickListe
 
     private Button handle;
     private Button developer_mode;
+    private Button gravity_handle;
 
 
     @Override
@@ -34,6 +35,9 @@ public class MidActivity extends AppCompatActivity  implements View.OnClickListe
         if(v==developer_mode){
             startActivity(new Intent(MidActivity.this, DevelopeActivity.class));
         }
+        if(v==gravity_handle){
+            startActivity(new Intent(MidActivity.this, GravityActivity.class));
+        }
 
 
     }
@@ -50,6 +54,9 @@ public class MidActivity extends AppCompatActivity  implements View.OnClickListe
 
         developer_mode = (Button) findViewById(R.id.developer_mode);
         developer_mode.setOnClickListener(this);
+
+        gravity_handle = (Button) findViewById(R.id.gravity_handle);
+        gravity_handle.setOnClickListener(this);
 
 
 
